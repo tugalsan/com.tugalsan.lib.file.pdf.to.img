@@ -41,19 +41,21 @@ public class TS_LibFilePdfToImgUtils {
         return file.resolveSibling("config.properties");
     }
 
-    public static Properties makeConfig(Path pathInput, int pageNr, int DPI) {
+    public static Properties makeConfig(Path pathInput, int pageNr, int DPI, int qualityPercent) {
         var props = new Properties();
         props.setProperty(CONFIG_PARAM_PATH_INPUT, pathInput.toAbsolutePath().toString());
         props.setProperty(CONFIG_PARAM_PAGE_NR, String.valueOf(pageNr));
         props.setProperty(CONFIG_PARAM_DPI, String.valueOf(DPI));
+        props.setProperty(CONFIG_PARAM_QUALITY_PERCENT, String.valueOf(qualityPercent));
         return props;
     }
     public static String CONFIG_PARAM_PATH_INPUT = "pathInput";
     public static String CONFIG_PARAM_DPI = "dpi";
+    public static String CONFIG_PARAM_QUALITY_PERCENT = "qualityPercent";
     public static String CONFIG_PARAM_PAGE_NR = "pageNr";
     public static String EXECUTE_PARAM_LOAD_CONFIG_FILE = "--load-properties-file";
 
-    public static TGS_UnionExcuse<Path> execute(Path driver, Path pathInput, int pageNr, int DPI) {
+    public static TGS_UnionExcuse<Path> execute(Path driver, Path pathInput, int pageNr, int DPI, int qualityPercent) {
         return TGS_UnSafe.call(() -> {
             d.ci("execute", "pathInput", pathInput);
             //CREATE TMP-INPUT BY MAIN-INPUT
@@ -62,7 +64,7 @@ public class TS_LibFilePdfToImgUtils {
             TS_FileUtils.copyAs(pathInput, _pathInput, true);
 
             //IF DONE, COPY TMP-OUTPUT TO MAIN-OUTPUT
-            var u = _execute(driver, _pathInput, pageNr, DPI);
+            var u = _execute(driver, _pathInput, pageNr, DPI, qualityPercent);
             if (u.isExcuse()) {
                 return u.toExcuse();
             }
@@ -73,12 +75,12 @@ public class TS_LibFilePdfToImgUtils {
         }, e -> TGS_UnionExcuse.ofExcuse(e));
     }
 
-    private static TGS_UnionExcuse<Path> _execute(Path driver, Path pathInput, int pageNr, int DPI) {
+    private static TGS_UnionExcuse<Path> _execute(Path driver, Path pathInput, int pageNr, int DPI, int qualityPercent) {
         var pathOutput = pathOutput(pathInput);
         d.ci("_execute", "pathOutput", pathOutput);
         var pathConfig = pathConfig(pathInput);
         d.ci("_execute", "pathConfig", pathConfig);
-        TS_FilePropertiesUtils.write(makeConfig(pathInput, pageNr, DPI), pathConfig);
+        TS_FilePropertiesUtils.write(makeConfig(pathInput, pageNr, DPI, qualityPercent), pathConfig);
         return TGS_UnSafe.call(() -> {
             d.ci("_execute", "rawPdf", pathInput);
             //CHECK IN-FILE
