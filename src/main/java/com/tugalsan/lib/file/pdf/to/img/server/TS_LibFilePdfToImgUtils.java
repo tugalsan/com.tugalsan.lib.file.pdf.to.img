@@ -45,13 +45,11 @@ public class TS_LibFilePdfToImgUtils {
         var props = new Properties();
         props.setProperty(CONFIG_PARAM_PATH_INPUT, pathInput.toAbsolutePath().toString());
         props.setProperty(CONFIG_PARAM_PAGE_NR, String.valueOf(pageNr));
-        props.setProperty(CONFIG_PARAM_DPI, String.valueOf(DPI));
         props.setProperty(CONFIG_PARAM_QUALITY_PERCENT, String.valueOf(qualityPercent));
         props.setProperty(CONFIG_PARAM_MAGNIFY_PERCENT, String.valueOf(magnifyPercent));
         return props;
     }
     public static String CONFIG_PARAM_PATH_INPUT = "pathInput";
-    public static String CONFIG_PARAM_DPI = "dpi";
     public static String CONFIG_PARAM_QUALITY_PERCENT = "qualityPercent";
     public static String CONFIG_PARAM_MAGNIFY_PERCENT = "magnifyPercent";
     public static String CONFIG_PARAM_PAGE_NR = "pageNr";
