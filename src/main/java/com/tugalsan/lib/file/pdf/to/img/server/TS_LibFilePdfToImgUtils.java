@@ -41,17 +41,19 @@ public class TS_LibFilePdfToImgUtils {
         return file.resolveSibling("config.properties");
     }
 
-    public static Properties makeConfig(Path pathInput, String type) {
+    public static Properties makeConfig(Path pathInput, int pageNr, int DPI) {
         var props = new Properties();
         props.setProperty(CONFIG_PARAM_PATH_INPUT, pathInput.toAbsolutePath().toString());
-        props.setProperty(CONFIG_PARAM_IMG_TYPE, type);
+        props.setProperty(CONFIG_PARAM_PAGE_NR, String.valueOf(pageNr));
+        props.setProperty(CONFIG_PARAM_DPI, String.valueOf(DPI));
         return props;
     }
     public static String CONFIG_PARAM_PATH_INPUT = "pathInput";
-    public static String CONFIG_PARAM_IMG_TYPE = "jpg";
+    public static String CONFIG_PARAM_DPI = "dpi";
+    public static String CONFIG_PARAM_PAGE_NR = "pageNr";
     public static String EXECUTE_PARAM_LOAD_CONFIG_FILE = "--load-properties-file";
 
-    public static TGS_UnionExcuse<Path> execute(Path driver, Path pathInput, String type) {
+    public static TGS_UnionExcuse<Path> execute(Path driver, Path pathInput, int pageNr, int DPI) {
         return TGS_UnSafe.call(() -> {
             d.ci("execute", "pathInput", pathInput);
             //CREATE TMP-INPUT BY MAIN-INPUT
@@ -60,7 +62,7 @@ public class TS_LibFilePdfToImgUtils {
             TS_FileUtils.copyAs(pathInput, _pathInput, true);
 
             //IF DONE, COPY TMP-OUTPUT TO MAIN-OUTPUT
-            var u = _execute(driver, _pathInput, type);
+            var u = _execute(driver, _pathInput, pageNr, DPI);
             if (u.isExcuse()) {
                 return u.toExcuse();
             }
@@ -71,12 +73,12 @@ public class TS_LibFilePdfToImgUtils {
         }, e -> TGS_UnionExcuse.ofExcuse(e));
     }
 
-    private static TGS_UnionExcuse<Path> _execute(Path driver, Path pathInput, String type) {
+    private static TGS_UnionExcuse<Path> _execute(Path driver, Path pathInput, int pageNr, int DPI) {
         var pathOutput = pathOutput(pathInput);
         d.ci("_execute", "pathOutput", pathOutput);
         var pathConfig = pathConfig(pathInput);
         d.ci("_execute", "pathConfig", pathConfig);
-        TS_FilePropertiesUtils.write(makeConfig(pathInput, type), pathConfig);
+        TS_FilePropertiesUtils.write(makeConfig(pathInput, pageNr, DPI), pathConfig);
         return TGS_UnSafe.call(() -> {
             d.ci("_execute", "rawPdf", pathInput);
             //CHECK IN-FILE
