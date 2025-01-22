@@ -34,7 +34,7 @@ public class TS_LibFilePdfToImgUtils {
 
     public static Path pathOutput(Path rawPdf) {
         var label = TS_FileUtils.getNameLabel(rawPdf);
-        return rawPdf.resolveSibling(label + ".htm");//spi.file needs htm!
+        return rawPdf.resolveSibling(label + ".jpg");
     }
 
     public static Path pathConfig(Path file) {
