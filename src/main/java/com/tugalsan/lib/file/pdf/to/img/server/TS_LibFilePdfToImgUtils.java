@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-@Deprecated //JUST USE com.tugalsan.api.file.pdf.pdfbox3.server.TS_FilePdfBox3UtilsImage.toImage(Path pdfSrc, int pageIdx, float scale);
+@Deprecated //JUST USE com.tugalsan.api.file.pdf.pdfbox3.server.TS_FilePdfBox3UtilsImage.toBufferedImage(Path pdfSrc, int pageIdx, float scale);
 public class TS_LibFilePdfToImgUtils {
 
     final private static TS_Log d = TS_Log.of(true, TS_LibFilePdfToImgUtils.class);
