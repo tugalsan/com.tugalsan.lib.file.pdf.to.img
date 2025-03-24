@@ -6,7 +6,7 @@ import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.os.server.TS_OsJavaUtils;
 import com.tugalsan.api.os.server.TS_OsProcess;
 import com.tugalsan.api.union.client.TGS_UnionExcuse;
-import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
+import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -57,7 +57,7 @@ public class TS_LibFilePdfToImgUtils {
     public static String EXECUTE_PARAM_LOAD_CONFIG_FILE = "--load-properties-file";
 
     public static TGS_UnionExcuse<Path> execute(Path driver, Path pathInput, int pageNr, int DPI, int qualityPercent, int magnifyPercent) {
-        return TGS_FuncMTCEUtils.call(() -> {
+        return TGS_FuncMTCUtils.call(() -> {
             d.ci("execute", "pathInput", pathInput);
             //CREATE TMP-INPUT BY MAIN-INPUT
             var tmp = Files.createTempDirectory("tmp").toAbsolutePath();
@@ -82,7 +82,7 @@ public class TS_LibFilePdfToImgUtils {
         var pathConfig = pathConfig(pathInput);
         d.ci("_execute", "pathConfig", pathConfig);
         TS_FilePropertiesUtils.write(makeConfig(pathInput, pageNr, DPI, qualityPercent, magnifyPercent), pathConfig);
-        return TGS_FuncMTCEUtils.call(() -> {
+        return TGS_FuncMTCUtils.call(() -> {
             d.ci("_execute", "rawPdf", pathInput);
             //CHECK IN-FILE
             if (pathInput == null || !TS_FileUtils.isExistFile(pathInput)) {
